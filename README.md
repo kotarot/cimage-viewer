@@ -9,12 +9,21 @@
 ## コンパイル・インストール・使い方
     $ make  
     $ make install  
-    $ cbmpviewer [input.bmp]  
+    $ cbmpviewer <input.bmp>  
 make installはしてもしなくても別にいい。
+
+## デモ
 
 ## 参考サイト
 * bmp ファイルフォーマット - Kondo, Masayoshi WebPage  
-http://www.kk.iij4u.or.jp/~kondo/bmp/
+http://www.kk.iij4u.or.jp/~kondo/bmp/  
 
 * 第6章 C言語による実践プログラミング - Armadillo実践開発ガイド  
-http://manual.atmark-techno.com/armadillo-guide/armadillo-guide-2_ja-1.0.0/ch06.html
+http://manual.atmark-techno.com/armadillo-guide/armadillo-guide-2_ja-1.0.0/ch06.html  
+
+* もう一度基礎からC言語 第47回 特殊な画面制御～コンソール入出力関数とエスケープシーケンス エスケープシーケンスによる画面制御  
+http://www.grapecity.com/tools/support/powernews/column/clang/047/page02.htm  
+
+* シェル - echoで文字に色をつける その1 - Miuran Business Systems  
+http://www.m-bsys.com/linux/echo-color-1  
+
