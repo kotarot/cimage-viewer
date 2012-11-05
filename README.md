@@ -15,7 +15,12 @@ make installは別にしなくてもいい。
 第2,3,4引数にはRGB各値の2値化のときのしきい値を0~255の間で入力できる。省いたときのデフォルト値は128。  
 
 ## デモ
-
+元画像 ikamusume_sq.bmp (のjpg画像)  
+![元画像](https://raw.github.com/arjgk/CBmpViewer/master/ikamusume_sq.jpg)  
+    $ cbmpviewer ikamusume_sq.bmp 150 160 160
+を実行すると、  
+![出力結果](https://raw.github.com/arjgk/CBmpViewer/master/Screenshot.png)  
+こんな感じ。  
 
 ## 参考サイト
 * bmp ファイルフォーマット - Kondo, Masayoshi WebPage  
