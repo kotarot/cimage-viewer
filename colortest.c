@@ -3,6 +3,8 @@
  */
 
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 // 前景
 #define FBK "\x1b[30m" // black
@@ -36,6 +38,11 @@
 #define IT "\x1b[9m" // invisible text
 
 int main() {
+    struct winsize win;
+
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
+    printf("col=%u row=%u\n\n", win.ws_col, win.ws_row);
+
     // black
     printf("%sab%scd%sef%s%s%s\n", BBK, FBK, BD, DF, FDF, BDF);
     // red
