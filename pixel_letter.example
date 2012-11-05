@@ -1,0 +1,21 @@
+col row
+-------
+
+800 800 pix
+125 40  letter
+6.4 20  pix/letter
+10  20  pix/letter
+80  40  letter :output
+
+--------
+
+800 800 pix
+40  125 letter
+20  6.4 pix/letter
+20  40  pix/letter
+40  20  letter :output
+
+--------
+
+
+
