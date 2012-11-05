@@ -13,27 +13,23 @@
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
 
-// RBGの2値化のしきい値
-// 0~255までで表されているものを2値化するときどこを境にするか
-#define THRESHOLD_R 128
-#define THRESHOLD_G 128
-#define THRESHOLD_B 128
-
 // メイン関数
 int main(int argc, char *argv[]) {
-
     // 引数チェック
-    if (argc != 2) {
+    if (argc < 2 || 5 < argc) {
         usage();
         return EXIT_SUCCESS;
+    } else if (argc == 2) {
+        // Viewプロシージャへ
+        // しきい値はデフォルト値
+        viewproc(argv[1], 128, 128, 128);
+    } else {
+        // しきい値のチェックしてないけど8bitに収まってればとりあえずおかしくはならないからこのままいく
+        viewproc(argv[1], (uint8_t)atoi(argv[2]), (uint8_t)atoi(argv[3]), (uint8_t)atoi(argv[4]));
     }
-    // argv[1]: 画像ファイル名
 
     // 画面クリア
     //printf("\x1b[2J");
-
-    // Viewプロシージャへ
-    viewproc(argv[1]);
 
     return EXIT_SUCCESS;
 }
@@ -41,19 +37,18 @@ int main(int argc, char *argv[]) {
 // Usage
 void usage(void) {
     printf("** CBmpViewer **\n");
-    printf("Usage: `cbmpviewer [input.bmp]`\n");
+    printf("Usage: `cbmpviewer <input.bmp> [threshold_r=128 threshold_g=128 threshold_b=128]`\n");
 }
 
 // Viewプロシージャ
-void viewproc(char *filename) {
+void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t threshold_b) {
     FILE *fp;
     bmpfileheader_t fh;
     bmpinfoheader_t ih;
     pixel_t **pix;
-    uint32_t i, j, m, n;
+    uint32_t i;
     struct winsize win; // コンソールサイズ
-    uint32_t bpl_c, bpl_r; // コンソール文字に対するbmpのピクセル比率
-    uint32_t letter, line; // コンソール出力の1行の文字数と行数
+    consolebmp_t cbmp;
 
     // 画像ファイルオープン
     if ((fp = fopen(filename, "rb")) == NULL) {
@@ -116,42 +111,19 @@ void viewproc(char *filename) {
     // 符号無し整数値で最小値は1
     // コンソールでの文字は縦横比が2:1になることも注意
     // 参照: pixel_letter.example
-    bpl_c = MAX(ih.width / win.ws_col, 1);
-    bpl_r = MAX(ih.height / win.ws_row, 1);
-    if (bpl_c < bpl_r) bpl_c = bpl_r >> 1; // /2
-    else               bpl_r = bpl_c << 1; // *2
-    letter = ih.width / bpl_c;
-    line = ih.height / bpl_r;
-    printf("[BMP/LETTER: OK] bpl_c=%u,bpl_r=%u,letter=%u,line=%u\n", bpl_c, bpl_r, letter, line);
+    cbmp.bpl_c = MAX(ih.width / win.ws_col, 1);
+    cbmp.bpl_r = MAX(ih.height / win.ws_row, 1);
+    if (cbmp.bpl_c < cbmp.bpl_r) cbmp.bpl_c = cbmp.bpl_r / 2;
+    else cbmp.bpl_r = cbmp.bpl_c * 2;
+    cbmp.letter = ih.width / cbmp.bpl_c;
+    cbmp.line = ih.height / cbmp.bpl_r;
+    printf("[BMP/LETTER: OK] bpl_c=%u,bpl_r=%u,letter=%u,line=%u\n", cbmp.bpl_c, cbmp.bpl_r, cbmp.letter, cbmp.line);
 
     // 色変換と出力
-    for (i = 0; i < line; i++) {
-        for (j = 0; j < letter; j++) {
-            uint32_t r, g, b, s;
-            uint8_t clr;
-
-            // 1文字で表される文のピクセルのRGB値の平均を求める
-            // まずはsum
-            r = g = b = 0;
-            for (m = 0; m < bpl_r; m++) {
-                for (n = 0; n < bpl_c; n++) {
-                    r += pix[i * bpl_r + m][j * bpl_c + n].red;
-                    g += pix[i * bpl_r + m][j * bpl_c + n].green;
-                    b += pix[i * bpl_r + m][j * bpl_c + n].blue;
-                }
-            }
-            // 平均
-            s = bpl_r * bpl_c;
-            r = r / s;
-            g = g / s;
-            b = b / s;
-
-            // RGB各値を2bit化して、RGBを3bit(8通り)で表す
-            clr = (r / THRESHOLD_R << 2) + (g / THRESHOLD_G << 1) + b / THRESHOLD_B;
-            printf("%u", clr);
-        }
-        printf("\n");
-    }
+    cbmp.threshold_r = threshold_r;
+    cbmp.threshold_g = threshold_g;
+    cbmp.threshold_b = threshold_b;
+    outputbmp(pix, &cbmp);
 
     // メモリ解放
     for (i = 0; i < ih.height; i++) {
@@ -274,3 +246,47 @@ void showbmpdata(pixel_t **pix, int32_t w, int32_t h) {
         printf("\n");
     }
 }
+
+// 色変換と出力
+void outputbmp(pixel_t **pix, consolebmp_t *cbmp) {
+    // カラーコード rgb = 000:black 001:blue 010:green 011:cyan 100:red 101:magenta 110:yellow 111:white
+    char clrcode[8] = {'0', '4', '2', '6', '1', '5', '3', '7'};
+	uint32_t i, j, m, n;
+
+    for (i = 0; i < cbmp->line; i++) {
+        for (j = 0; j < cbmp->letter; j++) {
+            uint32_t r, g, b, s;
+            uint8_t clr;
+
+            // 1文字で表される文のピクセルのRGB値の平均を求める
+            // まずはsum
+            r = g = b = 0;
+            for (m = 0; m < cbmp->bpl_r; m++) {
+                for (n = 0; n < cbmp->bpl_c; n++) {
+                    r += pix[i * cbmp->bpl_r + m][j * cbmp->bpl_c + n].red;
+                    g += pix[i * cbmp->bpl_r + m][j * cbmp->bpl_c + n].green;
+                    b += pix[i * cbmp->bpl_r + m][j * cbmp->bpl_c + n].blue;
+                }
+            }
+            // 平均
+            s = cbmp->bpl_r * cbmp->bpl_c;
+            r = r / s;
+            g = g / s;
+            b = b / s;
+
+            // RGB各値を2bit化して、RGBを3bit(8通り)で表す
+            r = (r < cbmp->threshold_r) ? 0 : 1;
+            g = (g < cbmp->threshold_g) ? 0 : 1;
+            b = (b < cbmp->threshold_b) ? 0 : 1;
+            clr = (r << 2) + (g << 1) + b;
+#ifdef DEBUG
+            printf("\x1b[4%cm%u", clrcode[clr], clr);
+#else
+            printf("\x1b[3%cm\x1b[4%cm%u", clrcode[clr], clrcode[clr], clr);
+#endif
+        }
+        printf("\x1b[39m\x1b[49m"); // デフォルトに戻す
+        printf("\n");
+    }
+}
+

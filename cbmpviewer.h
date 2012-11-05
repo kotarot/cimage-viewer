@@ -39,11 +39,22 @@ typedef struct TAG_PIXEL {
     uint8_t blue;
 } pixel_t;
 
+// ConsoleBMP構造体
+typedef struct TAG_CONSOLEBMP {
+    uint32_t bpl_c;  // コンソール文字に対するbmpのピクセル比率 col
+    uint32_t bpl_r;  // コンソール文字に対するbmpのピクセル比率 row
+    uint32_t letter; // コンソール出力の1行の文字数
+    uint32_t line;   // コンソール出力の1行の行数
+    uint8_t threshold_r; // しきい値
+    uint8_t threshold_g;
+    uint8_t threshold_b;
+} consolebmp_t;
+
 // 関数プロトタイプ宣言
 // Usage
 void usage(void);
-// Viewプロシージャ
-void viewproc(char *filename);
+// Viewプロシージャ ファイル名としきい値を受け取る
+void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t threshold_b);
 // 画像ヘッダ取得
 void getbmpheader(FILE *fp, bmpfileheader_t *fh, bmpinfoheader_t *ih);
 // ファイルポインタから指定のバイト取得(エラー処理付き)
@@ -56,5 +67,8 @@ void showbmpheader(bmpfileheader_t *fh, bmpinfoheader_t *ih);
 void readbmpdata(FILE *fp, pixel_t **pix, int32_t width, int32_t height);
 // 画像データの表示
 void showbmpdata(pixel_t **pix, int32_t width, int32_t height);
+// 色変換と出力
+void outputbmp(pixel_t **pix, consolebmp_t *cbmp);
 
 #endif
+
