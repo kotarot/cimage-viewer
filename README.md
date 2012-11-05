@@ -9,10 +9,10 @@
 ## コンパイル・インストール・使い方
     $ make  
     $ make install  
-    $ cbmpviewer <input.bmp> [threshold_r threshold_g threshold_b]  
+    $ cbmpviewer <input.bmp> [threshold_r=128 threshold_g=128 threshold_b=128]  
 make installは別にしなくてもいい。
 実行方法は第1引数にBMP画像のファイル名を入力する。  
-第2,3,4引数にはRGB各値の2値化の際のしきい値を0~255の間で入力できる。省いたときのデフォルト値は128。  
+第2,3,4引数にはRGB各値の2値化のときのしきい値を0~255の間で入力できる。省いたときのデフォルト値は128。  
 
 ## デモ
 
