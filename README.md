@@ -27,3 +27,6 @@ http://www.grapecity.com/tools/support/powernews/column/clang/047/page02.htm
 * シェル - echoで文字に色をつける その1 - Miuran Business Systems  
 http://www.m-bsys.com/linux/echo-color-1  
 
+* 端末ウィンドウサイズの取得 - 自問自答  
+http://d.hatena.ne.jp/iostream/20100219/1266566970  
+
