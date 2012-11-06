@@ -251,8 +251,10 @@ void showbmpdata(pixel_t **pix, int32_t w, int32_t h) {
 void outputbmp(pixel_t **pix, consolebmp_t *cbmp) {
     // カラーコード rgb = 000:black 001:blue 010:green 011:cyan 100:red 101:magenta 110:yellow 111:white
     char clrcode[8] = {'0', '4', '2', '6', '1', '5', '3', '7'};
-	uint32_t i, j, m, n;
+    uint32_t i, j, m, n;
 
+    // BUG: ここのforループはbmpのpixelがletterの倍数になっていることを前提としちゃってるから
+    //      そうじゃないときにメモリのおかしなところ参照しちゃってセグフォル
     for (i = 0; i < cbmp->line; i++) {
         for (j = 0; j < cbmp->letter; j++) {
             uint32_t r, g, b, s;
