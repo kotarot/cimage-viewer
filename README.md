@@ -16,10 +16,10 @@ make installは別にしなくてもいい。
 
 ## デモ
 元画像 ikamusume_sq.bmp (のjpg画像)  
-![元画像](https://raw.github.com/arjgk/CBmpViewer/master/ikamusume_sq.jpg)  
+![元画像](https://raw.github.com/kotarot/CBmpViewer/master/ikamusume_sq.jpg)  
     $ cbmpviewer ikamusume_sq.bmp 150 160 160
 を実行すると、  
-![出力結果](https://raw.github.com/arjgk/CBmpViewer/master/Screenshot.png)  
+![出力結果](https://raw.github.com/kotarot/CBmpViewer/master/Screenshot.png)  
 こんな感じ。  
 
 ## 参考サイト
