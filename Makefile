@@ -1,8 +1,8 @@
 cbmpviewer: cbmpviewer.c
-	gcc -O2 -Wall -o cbmpviewer cbmpviewer.c
+	gcc -O2 -Wall -o cbmpviewer cbmpviewer.c　-lm
 
 debug: cbmpviewer.c
-	gcc -DDEBUG -O2 -Wall -o cbmpviewer cbmpviewer.c
+	gcc -DDEBUG -O2 -Wall -o cbmpviewer cbmpviewer.c -lm
 
 cbmpviewer.c: cbmpviewer.h
 
