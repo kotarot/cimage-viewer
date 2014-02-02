@@ -118,7 +118,9 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
     else cbmp.bpl_r = cbmp.bpl_c * 2;
     cbmp.letter = ih.width / cbmp.bpl_c;
     cbmp.line = ih.height / cbmp.bpl_r;
+#ifdef DEBUG
     printf("[BMP/LETTER: OK] bpl_c=%u,bpl_r=%u,letter=%u,line=%u\n", cbmp.bpl_c, cbmp.bpl_r, cbmp.letter, cbmp.line);
+#endif
 
     // 色変換と出力
     cbmp.threshold_r = threshold_r;
