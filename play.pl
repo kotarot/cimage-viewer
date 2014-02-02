@@ -65,7 +65,6 @@ sub play
 	return unless($d);
 	for my $index( 0..$d/$step )
 	{
-		print ".";
 		my $thumbp =
 		   q#ffmpeg #
 		 . q# -v quiet #
@@ -75,9 +74,10 @@ sub play
 		 . qq# -i "$file" #
 		 . qq# -vf scale=$scale:-1#
 		 . qq# -f image2 "$tmpdir/$index.bmp" #;
-		system($thumbp);
+		system($thumbp . ' >/dev/null 2>&1');
 		die if(($? & 256) == 0);
 		print "\x1b[2J"; # 画面クリア
+
 		system(qq#cbmpviewer "$tmpdir/$index.bmp"#);
 	}
 	unlink while(<$tmpdir . '/*.bmp'>);
