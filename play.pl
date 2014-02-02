@@ -9,9 +9,9 @@ use Carp;
 
 my $ffmpeg_exe = 'ffmpeg';
 
-# my $TMPDIR = '/tmp/__out/';
+my $TMPDIR = '/tmp/__out/';
 # my $TMPDIR = 'R:\\__out/'              ;
-my $TMPDIR = '/mnt/hgfs/ramdisk/__out/';
+# my $TMPDIR = '/mnt/hgfs/ramdisk/__out/';
 
 # 動画の長さを採取
 # x y dur[ms]
@@ -70,8 +70,8 @@ sub play
 		   q#ffmpeg #
 		 . q# -v quiet #
 		 . q# -ss # . (sprintf "%d", $index * $step)
-#		 . q# -skip_frame nokey #
-		 . q# -skip_frame noref #
+		 . q# -skip_frame nokey #
+#		 . q# -skip_frame noref #
 		 . qq# -i "$file" #
 		 . qq# -vf scale=$scale:-1#
 		 . qq# -f image2 "$tmpdir/$index.bmp" #;
