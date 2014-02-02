@@ -377,8 +377,13 @@ void outputbmp(pixel_t **pix, consolebmp_t *cbmp) {
 #ifdef DEBUG
             printf("\x1b[0;48;5;%um%02x", clr, clr);
 #else
+#    if    FULLCOLOR
+            printf("\x1b[0;48;2;%2u:%2u:%2um ", r,g,b);
+            (void)(clr);
+#    else  /* FULLCOLOR */
             printf("\x1b[0;48;5;%um ", clr);
-#endif
+#    endif /* FULLCOLOR */
+#endif /* DEBUG */
         }
         printf("\x1b[39m\x1b[49m"); // デフォルトに戻す
         printf("\n");

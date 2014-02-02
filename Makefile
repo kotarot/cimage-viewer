@@ -1,6 +1,9 @@
 cbmpviewer: cbmpviewer.c
 	gcc -O2 -Wall -o cbmpviewer cbmpviewer.c -lm
 
+fullcolor: 
+	gcc -DFULLCOLOR -O2 -Wall -o cbmpviewer cbmpviewer.c -lm
+
 debug: cbmpviewer.c
 	gcc -DDEBUG -O2 -Wall -o cbmpviewer cbmpviewer.c -lm
 
