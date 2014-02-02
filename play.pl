@@ -53,6 +53,7 @@ sub mpg_info
 sub play
 {
 	my $file = shift;
+#	print "$file\n";
 	my $step = 1;
 	my $scale = 48; # 駒のサイズ SSH越しだと48くらいが限界
 	my $uniqueid = sprintf("%010d",time()).sprintf("%05d",$$);
@@ -60,8 +61,8 @@ sub play
 	mkdir $TMPDIR;
 	mkdir $tmpdir;
 	unlink while(<$tmpdir . '/*.bmp'>);
-	my ($x,  $y,  $d) = ();
-	  ($x,  $y,  $d) = &mpg_info($file);
+	my ($x,  $y,  $d) = &mpg_info($file);
+	return unless($d);
 	for my $index( 0..$d/$step )
 	{
 		print ".";
@@ -69,10 +70,13 @@ sub play
 		   q#ffmpeg #
 		 . q# -v quiet #
 		 . q# -ss # . (sprintf "%d", $index * $step)
+#		 . q# -skip_frame nokey #
+		 . q# -skip_frame noref #
 		 . qq# -i "$file" #
 		 . qq# -vf scale=$scale:-1#
 		 . qq# -f image2 "$tmpdir/$index.bmp" #;
 		system($thumbp);
+		die if(($? & 256) == 0);
 		print "\x1b[2J"; # 画面クリア
 		system(qq#cbmpviewer "$tmpdir/$index.bmp"#);
 	}
@@ -82,8 +86,21 @@ sub play
 }
 
 #####################################
-
-&play(<*.mp4>)
+if(@ARGV)
+{
+	&play($_) foreach(@ARGV);
+}
+else
+{
+	 if(<*.ts>)
+	 {
+	 	&play(<*.ts>);
+	 }
+	 elsif(<*.mp4>)
+	 {
+	 	&play(<*.mp4>);
+	 }
+}
 
 #####################################
 __END__
