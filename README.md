@@ -22,6 +22,10 @@ make installは別にしなくてもいい。
 ![出力結果](https://raw.github.com/katakk/CBmpViewer/master/Screenshot256.png)  
 こんな感じ。  
 
+## メモ
+Teraterm 4.76 以降ではSGR 38:2;r:g:b が使えるが現在の所256色表示なので効果なし
+SGR 38;5;col は Teraterm 4.8.0, xterm 271, Xfce terminal 0.4.8で使用できることを確認
+
 ## 参考サイト
 * bmp ファイルフォーマット - Kondo, Masayoshi WebPage  
 http://www.kk.iij4u.or.jp/~kondo/bmp/  
@@ -38,3 +42,5 @@ http://www.m-bsys.com/linux/echo-color-1
 * 端末ウィンドウサイズの取得 - 自問自答  
 http://d.hatena.ne.jp/iostream/20100219/1266566970  
 
+* 文字属性 (SGR)
+http://ttssh2.sourceforge.jp/manual/ja/about/ctrlseq.html#charattr
