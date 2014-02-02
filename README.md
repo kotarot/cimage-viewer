@@ -1,23 +1,23 @@
 # CBmpViewer
 ## とは
-コンソール上でBMP画像を(無理矢理)表示するプログラム。  
+コンソール上でBMP画像を(無理矢理)表示するプログラム。
 とりあえず作ったものなのでごくわずかのフォーマットにしか対応していない。  
 具体的には、Windows Bitmapの無圧縮24ビットで画像データがボトムアップで保存されているビットマップのみ対応。  
 コンソールでのエスケープシーケンスでの色表示するのは完全に機種依存だからうまく表示されるかは保証しない。  
+.... をforkして拡張背景色^[[38;5;を指定するように変更
 もちろん使用色は256色になって画素密度は小さくなるので粗い画像(のようなもの)になる。
 
 ## コンパイル・インストール・使い方
     $ make  
     $ make install  
-    $ cbmpviewer <input.bmp> [threshold_r=128 threshold_g=128 threshold_b=128]  
+    $ cbmpviewer <input.bmp>
 make installは別にしなくてもいい。
 実行方法は第1引数にBMP画像のファイル名を入力する。  
-第2,3,4引数にはRGB各値の2値化のときのしきい値を0~255の間で入力できる。省いたときのデフォルト値は128。  
 
 ## デモ
 元画像 ikamusume_sq.bmp (のjpg画像)  
 ![元画像](https://raw.github.com/kotarot/CBmpViewer/master/ikamusume_sq.jpg)  
-    $ cbmpviewer ikamusume_sq.bmp 150 160 160
+    $ cbmpviewer ikamusume_sq.bmp
 を実行すると、  
 ![出力結果](https://raw.github.com/katakk/CBmpViewer/master/Screenshot256.png)  
 こんな感じ。  
