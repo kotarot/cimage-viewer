@@ -17,4 +17,7 @@ clean:
 
 install:
 	install -m 755 cbmpviewer /usr/local/bin/
+	install -m 755 bmp.pl     /usr/local/bin/bmp
+	install -m 755 play.pl    /usr/local/bin/play
+
 
