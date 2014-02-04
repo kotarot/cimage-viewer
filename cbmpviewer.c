@@ -93,8 +93,16 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
     debug("[FILECLOSE: OK]\n");
 
     // コンソールサイズ取得
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-    debug("[CONSOLESIZE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
+	if ( isatty(STDOUT_FILENO) ) {
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
+		debug("[CONSOLESIZE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
+	}
+	else {
+		// パイプ : とりあえず 80x25 に変更
+		win.ws_col = 80;
+		win.ws_row = 25;
+		debug("[PIPE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
+	}
 
     // コンソール文字とピクセル比率の決定
     // ピクセル比率とはbmpでの何ピクセルがコンソールでの1文字になるか
