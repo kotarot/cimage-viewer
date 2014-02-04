@@ -43,13 +43,12 @@
 
 int main() {
     struct winsize win;
-	
-	pixel_t rainbow[11] = {
-	{255,   0,   0},	{255, 127,   0},	{255, 255,   0},	{127, 255,   0},
-	{  0, 255,   0},	{  0, 255, 127},	{  0, 127, 255},	{  0,   0, 255},
-	{127,   0, 255},	{255,   0, 255},	};
-	int i, r, g, b;
-	uint8_t clr;
+    pixel_t rainbow[11] = {
+    {255,   0,   0},    {255, 127,   0},    {255, 255,   0},    {127, 255,   0},
+    {  0, 255,   0},    {  0, 255, 127},    {  0, 127, 255},    {  0,   0, 255},
+    {127,   0, 255},    {255,   0, 255},    };
+    int i, r, g, b;
+    uint8_t clr;
 
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
     printf("col=%u row=%u\n\n", win.ws_col, win.ws_row);
@@ -71,18 +70,18 @@ int main() {
     // white
     printf("%sab%scd%sef%s%s%s\n", BWT, FWT, BD, DF, FDF, BDF);
 
-	for(i=0; i < 10; i++) {
-		r = rainbow[i].red;
-		g = rainbow[i].green;
-		b = rainbow[i].blue;
+    for(i=0; i < 10; i++) {
+        r = rainbow[i].red;
+        g = rainbow[i].green;
+        b = rainbow[i].blue;
 
-		clr = near(r,g,b);
-		printf("\x1b[48;5;%um", clr);
-		printf("(%3u,%3u,%3u) = %3u  ",r,g,b, clr);
-		printf("%s%s%s%s", BD, DF, FDF, BDF);
-		printf("\x1b[48;5;%umab\x1b[38;5;%umcd%sef%s%s%s", clr, clr, BD, DF, FDF, BDF);
-		printf("\n");
+        clr = near(r,g,b);
+        printf("\x1b[48;5;%um", clr);
+        printf("(%3u,%3u,%3u) = %3u  ",r,g,b, clr);
+        printf("%s%s%s%s", BD, DF, FDF, BDF);
+        printf("\x1b[48;5;%umab\x1b[38;5;%umcd%sef%s%s%s", clr, clr, BD, DF, FDF, BDF);
+        printf("\n");
     }
-	return 0;
+    return 0;
 }
 
