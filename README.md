@@ -17,8 +17,11 @@ make installは別にしなくてもいい。
 パイプも使用可能。  
 環境変数COLUMNSにて横幅設定　デフォルトで80  
 環境変数TERMがxterm なのは256色にするため必須  
+  
+  
+  
+ffmpeg が入っている環境下であれば下記が可能  
 
-ffmpeg が入っている環境下であれば下記が可能
     $ bmp ikamusume_sq.jpg 
 端末でとりあえず画像確認できます、teratermで内容の確認がさくさくできます　
 
