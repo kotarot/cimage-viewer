@@ -12,7 +12,7 @@ sub view
     my $TMPDIR = '/tmp/';
     my $tmp = $file;
     $tmp =~ tr#/#-#;
-    open my $fh,  $ffmpeg_exe . ' -v quiet -i "' . $file . '" -f image2 ' . $TMPDIR . $tmp . '.bmp  2>&1 |';
+    open my $fh,  $ffmpeg_exe . ' -i "' . $file . '" -f image2 ' . $TMPDIR . $tmp . '.bmp  2>&1 |';
     my @info = <$fh>;
     close $fh;
     # print "@info";
