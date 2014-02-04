@@ -55,6 +55,8 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
     uint32_t i;
     struct winsize win; // コンソールサイズ
     consolebmp_t cbmp;
+    char *p;
+
 
     // 画像ファイルオープン
     if ((fp = fopen(filename, "rb")) == NULL) {
@@ -92,16 +94,21 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
     fclose(fp);
     debug("[FILECLOSE: OK]\n");
 
-    // コンソールサイズ取得
-    if ( isatty(STDOUT_FILENO) ) {
-        ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-        debug("[CONSOLESIZE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
-    }
+
+   // コンソールサイズ取得
+   // COLUMNS が指定されていなければ、コンソールサイズを取得
+   // パイプの場合はデフォルト80またはCOLUMNS
+    win.ws_col = 80;
+    if ((p = getenv("COLUMNS")) != NULL && *p != '\0')
+        win.ws_col = atoi(p);
     else {
-        // パイプ : とりあえず 80x25 に変更
-        win.ws_col = 80;
-        win.ws_row = 25;
-        debug("[PIPE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
+        if ( isatty(STDOUT_FILENO) ) {
+            ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
+            debug("[CONSOLESIZE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
+        }
+        else {
+            debug("[PIPE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
+        }
     }
 
     // コンソール文字とピクセル比率の決定
