@@ -14,6 +14,11 @@
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
 
+#if DEBUG
+#define debug(...) printf(__VA_ARGS__)
+#else /* DEBUG */
+#define debug(...)
+#endif /* DEBUG */
 // メイン関数
 int main(int argc, char *argv[]) {
     // 引数チェック
@@ -56,20 +61,14 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
         printf("Error: file open\n");
         exit(EXIT_FAILURE);
     }
-#ifdef DEBUG
-    printf("[FILEOPEN: OK]\n");
-#endif
+    debug("[FILEOPEN: OK]\n");
 
     // 画像ヘッダ取得
     getbmpheader(fp, &fh, &ih);
-#ifdef DEBUG
     showbmpheader(&fh, &ih);
-#endif
     // 画像ヘッダの(このプログラムで対応する)フォーマットチェック
     checkbmpheader(&fh, &ih);
-#ifdef DEBUG
-    printf("[FORMAT: OK]\n");
-#endif
+    debug("[FORMAT: OK]\n");
 
     // ピクセル分の配列を動的に確保
     if ((pix = (pixel_t **)malloc(sizeof(pixel_t *) * ih.height)) == NULL) {
@@ -82,30 +81,20 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
             exit(EXIT_FAILURE);
         }
     }
-#ifdef DEBUG
-    printf("[MEMORYALLOC: OK]\n");
-#endif
+    debug("[MEMORYALLOC: OK]\n");
 
     // 画像データをメモリに読み込む
     readbmpdata(fp, pix, ih.width, ih.height);
-#ifdef DEBUG
-    printf("[READDATA: OK]\n");
-#endif
-#ifdef DEBUG
+    debug("[READDATA: OK]\n");
     //showbmpdata(pix, ih.width, ih.height);
-#endif
 
     // ファイルクローズ
     fclose(fp);
-#ifdef DEBUG
-    printf("[FILECLOSE: OK]\n");
-#endif
+    debug("[FILECLOSE: OK]\n");
 
     // コンソールサイズ取得
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-#ifdef DEBUG
-    printf("[CONSOLESIZE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
-#endif
+    debug("[CONSOLESIZE: OK] col=%u,row=%u\n", win.ws_col, win.ws_row);
 
     // コンソール文字とピクセル比率の決定
     // ピクセル比率とはbmpでの何ピクセルがコンソールでの1文字になるか
@@ -118,9 +107,7 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
     else cbmp.bpl_r = cbmp.bpl_c * 2;
     cbmp.letter = ih.width / cbmp.bpl_c;
     cbmp.line = ih.height / cbmp.bpl_r;
-#ifdef DEBUG
-    printf("[BMP/LETTER: OK] bpl_c=%u,bpl_r=%u,letter=%u,line=%u\n", cbmp.bpl_c, cbmp.bpl_r, cbmp.letter, cbmp.line);
-#endif
+    debug("[BMP/LETTER: OK] bpl_c=%u,bpl_r=%u,letter=%u,line=%u\n", cbmp.bpl_c, cbmp.bpl_r, cbmp.letter, cbmp.line);
 
     // 色変換と出力
     cbmp.threshold_r = threshold_r;
@@ -133,9 +120,7 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
         free(pix[i]);
     }
     free(pix);
-#ifdef DEBUG
-    printf("[MEMORYFREE: OK]\n");
-#endif
+    debug("[MEMORYFREE: OK]\n");
 }
 
 // 画像ヘッダ取得
@@ -194,26 +179,24 @@ void checkbmpheader(bmpfileheader_t *fh, bmpinfoheader_t *ih) {
 
 // 画像ヘッダの表示
 void showbmpheader(bmpfileheader_t *fh, bmpinfoheader_t *ih) {
-    printf("--file header--\n");
-    printf("type: %c%c\n", (char)fh->type, (char)(fh->type >> 8));
-    printf("size: %u\n", fh->size);
-    printf("reserved1: %u\n", fh->reserved1);
-    printf("reserved1: %u\n", fh->reserved2);
-    printf("offbits: %u\n", fh->offbits);
-    //printf("----\n");
-    printf("--info header--\n");
-    printf("size: %u\n", ih->size);
-    printf("width: %d\n", ih->width);
-    printf("height: %d\n", ih->height);
-    printf("planes: %u\n", ih->planes);
-    printf("bitcount: %u\n", ih->bitcount);
-    printf("compression: %u\n", ih->compression);
-    printf("sizeimage: %u\n", ih->sizeimage);
-    printf("xpixpermeter: %d\n", ih->xpixpermeter);
-    printf("ypixpermeter: %d\n", ih->ypixpermeter);
-    printf("clrused: %u\n", ih->clrused);
-    printf("clrimporant: %u\n", ih->clrimporant);
-    //printf("----\n");
+    debug("--file header--\n");
+    debug("type: %c%c\n", (char)fh->type, (char)(fh->type >> 8));
+    debug("size: %u\n", fh->size);
+    debug("reserved1: %u\n", fh->reserved1);
+    debug("reserved1: %u\n", fh->reserved2);
+    debug("offbits: %u\n", fh->offbits);
+    debug("--info header--\n");
+    debug("size: %u\n", ih->size);
+    debug("width: %d\n", ih->width);
+    debug("height: %d\n", ih->height);
+    debug("planes: %u\n", ih->planes);
+    debug("bitcount: %u\n", ih->bitcount);
+    debug("compression: %u\n", ih->compression);
+    debug("sizeimage: %u\n", ih->sizeimage);
+    debug("xpixpermeter: %d\n", ih->xpixpermeter);
+    debug("ypixpermeter: %d\n", ih->ypixpermeter);
+    debug("clrused: %u\n", ih->clrused);
+    debug("clrimporant: %u\n", ih->clrimporant);
 }
 
 // 画像データをメモリに読み込む
@@ -277,16 +260,12 @@ void outputbmp(pixel_t **pix, consolebmp_t *cbmp) {
             g = g / s;
             b = b / s;
             clr = near(r,g,b);
-#ifdef DEBUG
-            printf("\x1b[0;48;5;%um%02x", clr, clr);
-#else
-#    if    FULLCOLOR
+#if    FULLCOLOR
             printf("\x1b[0;48;2;%2u:%2u:%2um ", r,g,b);
             (void)(clr);
-#    else  /* FULLCOLOR */
+#else  /* FULLCOLOR */
             printf("\x1b[0;48;5;%um ", clr);
-#    endif /* FULLCOLOR */
-#endif /* DEBUG */
+#endif /* FULLCOLOR */
         }
         printf("\x1b[39m\x1b[49m"); // デフォルトに戻す
         printf("\n");
