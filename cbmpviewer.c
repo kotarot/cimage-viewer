@@ -133,11 +133,17 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
     // コンソールでの文字は縦横比が2:1になることも注意
     // 参照: pixel_letter.example
     cbmp.bpl_c = MAX(ih.width / win.ws_col, 1);
-    cbmp.bpl_r = MAX(ih.height / win.ws_row, 1);
-    if (cbmp.bpl_c < cbmp.bpl_r) cbmp.bpl_c = cbmp.bpl_r / 2;
-    else cbmp.bpl_r = cbmp.bpl_c * 2;
-    cbmp.letter = ih.width / cbmp.bpl_c;
-    cbmp.line = ih.height / cbmp.bpl_r;
+    for(;;)
+    {
+        cbmp.bpl_r = cbmp.bpl_c * 2;
+        cbmp.letter = ih.width / cbmp.bpl_c;
+        cbmp.line = ih.height / cbmp.bpl_r;
+        debug("[BMP/LETTER: ..] bpl_c=%u,bpl_r=%u,letter=%u,line=%u\n", cbmp.bpl_c, cbmp.bpl_r, cbmp.letter, cbmp.line);
+        if(cbmp.letter > win.ws_col)
+        {
+            cbmp.bpl_c++;
+        } else break;
+    }
     debug("[BMP/LETTER: OK] bpl_c=%u,bpl_r=%u,letter=%u,line=%u\n", cbmp.bpl_c, cbmp.bpl_r, cbmp.letter, cbmp.line);
 
     // 色変換と出力
