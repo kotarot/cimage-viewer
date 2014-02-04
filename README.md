@@ -13,10 +13,16 @@
 make installは別にしなくてもいい。
 実行方法は第1引数にBMP画像のファイル名を入力する。  
 
-    $ TERM=xterm COLUMNS=120 ./cbmpviewer ikamusume_sq.bmp | tee ikamusume_sq.txt
-パイプも使用可能。
-環境変数COLUMNSにて横幅設定　デフォルトで80
-環境変数TERMがxterm なのは256色にするため必須
+    $ TERM=xterm COLUMNS=120 ./cbmpviewer ikamusume_sq.bmp | tee ikamusume_sq.txt 
+パイプも使用可能。  
+環境変数COLUMNSにて横幅設定　デフォルトで80  
+環境変数TERMがxterm なのは256色にするため必須  
+
+    $ bmp ikamusume_sq.jpg 
+端末でとりあえず画像確認できます、teratermで内容の確認がさくさくできます　
+
+    $ play "ストライク・ザ・ブラッド　#16.mp4" 
+動画もサムネイル確認程度ならできるようです (動画は添付されません 
 
 
 ## デモ
