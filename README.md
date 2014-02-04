@@ -7,11 +7,13 @@
 もちろん使用色は256色になって画素密度は小さくなるので粗い画像(のようなもの)になる。
 
 ## コンパイル・インストール・使い方
+
     $ make  
     $ make install  
-    $ cbmpviewer <input.bmp>
+    $ cbmpviewer <input.bmp> [threshold_r=128 threshold_g=128 threshold_b=128]  
 make installは別にしなくてもいい。
 実行方法は第1引数にBMP画像のファイル名を入力する。  
+第2,3,4引数にはRGB各値の2値化のときのしきい値を0~255の間で入力できる。省いたときのデフォルト値は128。  
 
     $ TERM=xterm COLUMNS=120 ./cbmpviewer ikamusume_sq.bmp | tee ikamusume_sq.txt 
 パイプも使用可能。  
@@ -57,5 +59,5 @@ http://www.m-bsys.com/linux/echo-color-1
 * 端末ウィンドウサイズの取得 - 自問自答  
 http://d.hatena.ne.jp/iostream/20100219/1266566970  
 
-* 文字属性 (SGR)
+* 文字属性 (SGR)  
 http://ttssh2.sourceforge.jp/manual/ja/about/ctrlseq.html#charattr
