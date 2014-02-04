@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <math.h>
@@ -19,6 +20,10 @@
 #else /* DEBUG */
 #define debug(...)
 #endif /* DEBUG */
+
+int color256 = 0;
+int fullcolor = 0;
+
 // メイン関数
 int main(int argc, char *argv[]) {
     // 引数チェック
@@ -57,6 +62,17 @@ void viewproc(char *filename, uint8_t threshold_r, uint8_t threshold_g, uint8_t 
     consolebmp_t cbmp;
     char *p;
 
+    //TERM=xterm の場合は 256色 (xterm-256color xterm-3gp xterm-r6 ...
+    // xterm-256color 指定すると色数落ちるような気がする @teraterm
+    if ((p = getenv("TERM")) != NULL && *p != '\0' && strncasecmp(p, "xterm", strlen("xterm")) == 0)
+        color256 = 1;
+    if ((p = getenv("t_Co")) != NULL && *p != '\0')
+    {
+        i = atoi(p);
+        if(i == 8) color256 = 0;
+        else if(i == 256) color256 = 1;
+        else if(i == 16777216) fullcolor =1;
+    }
 
     // 画像ファイルオープン
     if ((fp = fopen(filename, "rb")) == NULL) {
@@ -250,6 +266,8 @@ void showbmpdata(pixel_t **pix, int32_t w, int32_t h) {
 
 // 色変換と出力
 void outputbmp(pixel_t **pix, consolebmp_t *cbmp) {
+    // カラーコード rgb = 000:black 001:blue 010:green 011:cyan 100:red 101:magenta 110:yellow 111:white
+    char clrcode[8] = {'0', '4', '2', '6', '1', '5', '3', '7'};
     uint32_t i, j, m, n;
 
     // BUG: ここのforループはbmpのpixelがletterの倍数になっていることを前提としちゃってるから
@@ -274,13 +292,27 @@ void outputbmp(pixel_t **pix, consolebmp_t *cbmp) {
             r = r / s;
             g = g / s;
             b = b / s;
-            clr = near(r,g,b);
-#if    FULLCOLOR
-            printf("\x1b[0;48;2;%2u:%2u:%2um ", r,g,b);
-            (void)(clr);
-#else  /* FULLCOLOR */
-            printf("\x1b[0;48;5;%um ", clr);
-#endif /* FULLCOLOR */
+            if(color256)
+            {
+                if(fullcolor) {
+                    // 拡張 2
+                    printf("\x1b[0;48;2;%2u:%2u:%2um ", r,g,b);
+                }
+                else {
+                    // 拡張 5;
+                    clr = near(r,g,b);
+                    printf("\x1b[0;48;5;%um ", clr);
+                }
+            }
+            else
+            {
+                // RGB各値を2bit化して、RGBを3bit(8通り)で表す
+                r = (r < cbmp->threshold_r) ? 0 : 1;
+                g = (g < cbmp->threshold_g) ? 0 : 1;
+                b = (b < cbmp->threshold_b) ? 0 : 1;
+                clr = (r << 2) + (g << 1) + b;
+                printf("\x1b[3%cm\x1b[4%cm%u", clrcode[clr], clrcode[clr], clr);
+            }
         }
         printf("\x1b[39m\x1b[49m"); // デフォルトに戻す
         printf("\n");
