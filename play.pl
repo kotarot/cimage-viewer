@@ -67,7 +67,7 @@ sub play
 	{
 		my $thumbp =
 		   q#ffmpeg #
-		 . q# -v quiet #
+#		 . q# -v quiet #
 		 . q# -ss # . (sprintf "%d", $index * $step)
 		 . q# -skip_frame nokey #
 #		 . q# -skip_frame noref #
