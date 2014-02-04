@@ -3,8 +3,12 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <math.h>
+#include "cbmpviewer.h"
 
 // 前景
 #define FBK "\x1b[30m" // black
