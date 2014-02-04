@@ -46,8 +46,8 @@ ffmpeg が入っている環境下であれば下記が可能
 こんな感じ。  
 
 ## メモ
-Teraterm 4.76 以降ではSGR 38:2;r:g:b が使えるが現在の所256色表示なので効果なし
-SGR 38;5;col は Teraterm 4.8.0, xterm 271, Xfce terminal 0.4.8で使用できることを確認
+Teraterm 4.76 以降ではSGR 38:2;r:g:b が使えるが現在の所256色表示なので効果なし  
+SGR 38;5;col は Teraterm 4.8.0, xterm 271, Xfce terminal 0.4.8で使用できることを確認  
 
 ## 参考サイト
 * bmp ファイルフォーマット - Kondo, Masayoshi WebPage  
