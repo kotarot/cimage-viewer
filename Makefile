@@ -1,16 +1,16 @@
 cbmpviewer: cbmpviewer.c
 	gcc -O2 -Wall -o cbmpviewer cbmpviewer.c -lm
 
-fullcolor: 
-	gcc -DFULLCOLOR -O2 -Wall -o cbmpviewer cbmpviewer.c -lm
-
 debug: cbmpviewer.c
 	gcc -DDEBUG -O2 -Wall -o cbmpviewer cbmpviewer.c -lm
+
+colortest:
+	gcc -O2 -Wall -o colortest colortest.c -lm
 
 cbmpviewer.c: cbmpviewer.h
 
 clean:
-	rm cbmpviewer
+	rm -f cbmpviewer colortest
 
 install:
 	install -m 755 cbmpviewer /usr/local/bin/
