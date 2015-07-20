@@ -60,7 +60,7 @@ $ TERM=xterm cbmpviewer ikamusume_sq.bmp
 ```
 
 を実行すると、  
-![出力結果](https://raw.github.com/katakk/cimage-viewer/master/Screenshot256.png)  
+![出力結果](https://raw.github.com/katakk/CBmpViewer/master/Screenshot256.png)  
 こんな感じ。
 
 ## メモ
