@@ -1,6 +1,6 @@
-# CBmpViewer
-## とは
-コンソール上でBMP画像を(無理矢理)表示するプログラム。
+# cimage-viewer
+
+cimage-viewer (しめじビューワー) はコンソール上でBMP画像を(無理矢理)表示するプログラム。
 とりあえず作ったものなのでごくわずかのフォーマットにしか対応していない。  
 具体的には、Windows Bitmapの無圧縮24ビットで画像データがボトムアップで保存されているビットマップのみ対応。  
 コンソールでのエスケープシーケンスでの色表示するのは完全に機種依存だからうまく表示されるかは保証しない。  
@@ -35,16 +35,16 @@ ffmpeg が入っている環境下であれば下記が可能
 
 ## デモ
 元画像 ikamusume_sq.bmp (のjpg画像)  
-![元画像](https://raw.github.com/kotarot/CBmpViewer/master/ikamusume_sq.jpg)  
+![元画像](https://raw.github.com/kotarot/cimage-viewer/master/ikamusume_sq.jpg)  
 
     $ TERM=vt100 cbmpviewer ikamusume_sq.bmp 150 160 160
 を実行すると、  
-![出力結果](https://raw.github.com/kotarot/CBmpViewer/master/Screenshot.png)  
+![出力結果](https://raw.github.com/kotarot/cimage-viewer/master/Screenshot.png)  
 こんな感じ。  
 
     $ TERM=xterm cbmpviewer ikamusume_sq.bmp
 を実行すると、  
-![出力結果](https://raw.github.com/katakk/CBmpViewer/master/Screenshot256.png)  
+![出力結果](https://raw.github.com/katakk/cimage-viewer/master/Screenshot256.png)  
 こんな感じ。  
 
 ## メモ
